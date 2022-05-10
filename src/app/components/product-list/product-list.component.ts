@@ -7,15 +7,15 @@ import { Product } from 'src/app/interfaces/product';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
+  private _searchValue: string = '';
   showImage: boolean = false;
   imageHeight: number = 40;
   imageMargin: number = 2;
-  searchValue: string = '';
   products: Product[] = [
     {
       productId: 1,
       productName: "Leaf Rake",
-      productCode: "GDN-0011",
+      productCode: "GDN/0011",
       releaseDate: "March 19, 2016",
       description: "Leaf rake with 48-inch wooden handle.",
       price: 19.95,
@@ -25,7 +25,7 @@ export class ProductListComponent implements OnInit {
     {
       productId: 2,
       productName: "Garden Cart",
-      productCode: "GDN-0023",
+      productCode: "GDN/0023",
       releaseDate: "March 18, 2016",
       description: "15 gallon capacity rolling garden cart",
       price: 32.99,
@@ -35,7 +35,7 @@ export class ProductListComponent implements OnInit {
     {
       productId: 5,
       productName: "Hammer",
-      productCode: "TBX-0048",
+      productCode: "TBX/0048",
       releaseDate: "May 21, 2016",
       description: "Curved claw steel hammer",
       price: 8.9,
@@ -45,7 +45,7 @@ export class ProductListComponent implements OnInit {
     {
       productId: 8,
       productName: "Saw",
-      productCode: "TBX-0022",
+      productCode: "TBX/0022",
       releaseDate: "May 15, 2016",
       description: "15-inch steel blade hand saw",
       price: 11.55,
@@ -55,22 +55,34 @@ export class ProductListComponent implements OnInit {
     {
       productId: 10,
       productName: "Video Game Controller",
-      productCode: "GMG-0042",
+      productCode: "GMG/0042",
       releaseDate: "October 15, 2015",
       description: "Standard two-button video game controller",
       price: 35.95,
       starRating: 4.6,
       imageUrl: "https://openclipart.org/image/300px/svg_to_png/120337/xbox-controller_01.png"
     }
-  ] 
+  ];
+  filteredProducts: Product[]=[];
+
+  set searchValue(value: string){
+    this._searchValue = value; //the set property is not importent (just for demonstration)
+    this.filterProductList(this._searchValue);
+  }
+
+  get searchValue() : string {
+    return this._searchValue;
+  }
 
   constructor() { }
 
   ngOnInit(): void {
+    this.filteredProducts = this.products;
   }
 
-  searchData(){
-    this.searchValue = 'new value ' + this.searchValue;
+  filterProductList(value: string): void{
+    value = value.toLocaleLowerCase();
+    this.filteredProducts = this.products.filter((product: Product) => product.productName.toLowerCase().includes(value));
   }
 
   toggleImage():void {
